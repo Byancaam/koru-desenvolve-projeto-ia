@@ -18,10 +18,39 @@ askButton.addEventListener('click', function () {
   askButton.disabled = true;
   askButton.textContent = 'Carregando ...';
 
-  setTimeout(function () {
-    askButton.disabled = false;
-    askButton.textContent = 'Perguntar';
-  }, 2000);
+  // Requisição a API do chatGPT
 
-  console.log('Pronto para fazer a requisição');
+  (async function () {
+    try {
+      const response = await fetch(
+        'https://api.openai.com/v1/chat/completions',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${apiKeyInput.value}`,
+          },
+          body: JSON.stringify({
+            model: 'gpt-3.5-turbo',
+            messages: [{ role: 'user', content: questionInput.value }],
+            max_tokens: 100,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      // console.log('Data: ', data);
+
+      answerElement.textContent =
+        data.choices?.[0]?.message?.content || 'Sem resposta.';
+      answerElement.parentElement.hidden = false;
+    } catch (error) {
+      console.error(error);
+      alert('Ocorreu um erro ao consultar a IA.');
+    } finally {
+      askButton.disabled = false;
+      askButton.textContent = 'Perguntar';
+    }
+  })();
 });
