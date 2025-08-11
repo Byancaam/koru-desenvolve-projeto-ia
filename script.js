@@ -2,15 +2,22 @@ const apiKeyInput = document.getElementById('apiKeyInput');
 const questionInput = document.getElementById('questionInput');
 const answerElement = document.getElementById('answerText');
 const askButton = document.getElementById('askButton');
+const errorMessage = document.getElementById('errorMessage');
 
 askButton.addEventListener('click', function () {
+  errorMessage.hidden = true;
+  errorMessage.textContent = '';
+  answerElement.parentElement.hidden = true;
+
   if (!apiKeyInput.value) {
-    alert('Por favor, insira sua Api key?');
+    errorMessage.textContent = 'Por favor, insira sua API Key.';
+    errorMessage.hidden = false;
     return;
   }
 
   if (!questionInput.value) {
-    alert('Por favor, insira a sua pergunta!');
+    errorMessage.textContent = 'Por favor, insira a sua pergunta.';
+    errorMessage.hidden = false;
     return;
   }
 
@@ -40,14 +47,19 @@ askButton.addEventListener('click', function () {
 
       const data = await response.json();
 
-      // console.log('Data: ', data);
+      if (!response.ok) {
+        errorMessage.textContent = data.error?.message || 'Erro desconhecido.';
+        errorMessage.hidden = false;
+        return;
+      }
 
       answerElement.textContent =
         data.choices?.[0]?.message?.content || 'Sem resposta.';
       answerElement.parentElement.hidden = false;
     } catch (error) {
       console.error(error);
-      alert('Ocorreu um erro ao consultar a IA.');
+      errorMessage.textContent = 'Ocorreu um erro ao consultar a IA.';
+      errorMessage.hidden = false;
     } finally {
       askButton.disabled = false;
       askButton.textContent = 'Perguntar';
