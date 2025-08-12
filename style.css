@@ -32,12 +32,15 @@ header input {
   padding: 0.5rem;
   border: 1px solid #ccc;
   border-radius: 4px;
+  width: 250px;
 }
 
 /* --- Main --- */
 main {
   flex: 1;
   padding: 2rem;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .input-area {
@@ -54,26 +57,45 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
   resize: none;
+  font-size: 1rem;
 }
 
 button {
-  align-items: flex-start;
   padding: 0.6rem 1.2rem;
   border: none;
   background-color: #007bff;
   color: white;
   border-radius: 4px;
   cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
+button:hover:not(:disabled) {
   background-color: #0056b3;
+}
+
+button:disabled {
+  background-color: #a3c0ff;
+  cursor: not-allowed;
 }
 
 .answer-area {
   padding: 1rem;
   border-radius: 4px;
   background-color: #e9ecef;
+}
+
+.answer-area p {
+  white-space: pre-wrap; /*mantém quebras de linha da resposta*/
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+#errorMessage {
+  color: red;
+  margin-bottom: 1rem;
+  min-height: 1.2em; /* para evitar pulos no layout quando aparecer/desaparecer */
 }
 
 /* --- Footer --- */
